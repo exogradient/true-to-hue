@@ -254,7 +254,7 @@ Results are the highest-stakes screen — where learning happens and where share
 | Dimension | dialed.gg | splash-of-hue |
 |-----------|-----------|---------------|
 | Purpose | Entertainment (test) | Education (teach + test) |
-| Scoring | CIE76, hue-weighted sigmoid | CIEDE2000, per-dimension breakdown |
+| Scoring | CIE76, hue-weighted sigmoid | CIEDE2000 + hue-recovery, per-dimension breakdown |
 | Modes | Play + Daily + Multiplayer | Play + Match + Dial + Name + Read (skill-targeted) |
 | Picker | 3 vertical strips (abstract) | SB field + hue bar (spatial) |
 | Results | Score + roast text | Score + roast + dimensional analysis |

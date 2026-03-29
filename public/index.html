@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,12 +31,25 @@
     --surface: #111111;
     --surface-strong: #151515;
     --surface-raised: #1a1a1a;
+    --surface-elevated: #1e1e1e;
     --border: var(--gray-5);
     --border-strong: var(--gray-6);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-focus: rgba(255, 255, 255, 0.18);
     --text: var(--gray-12);
     --text-dim: var(--gray-11);
     --text-muted: var(--gray-9);
     --text-soft: var(--gray-10);
+
+    --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.22);
+    --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.32);
+    --glow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --glow-inner-strong: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+
+    --tier-elite: #c4965a;
+    --tier-strong: #5a9ca4;
+    --tier-solid: #8a8578;
+    --tier-learning: #7a7a7a;
 
     --space-1: 4px;
     --space-2: 8px;
@@ -71,7 +84,7 @@
 
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    font-weight: 500;
+    font-weight: 400;
     background:
       radial-gradient(circle at top left, rgba(255, 255, 255, 0.035), transparent 24%),
       linear-gradient(180deg, #0d0d0d 0%, #090909 58%, #0a0a0a 100%);
@@ -104,9 +117,9 @@
   }
   body::after { display: none; }
 
-  h1 { font-size: 1.4rem; font-weight: 500; letter-spacing: -0.03em; }
-  p { line-height: 1.45; }
-  button, select, input { font: inherit; }
+  h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.03em; }
+  p { line-height: 1.5; }
+  button, select, input { font: inherit; font-weight: 500; }
 
   .screen {
     display: none;
@@ -128,18 +141,32 @@
 
   .panel {
     background: var(--surface);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 10px 24px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      var(--glow-inner),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      var(--shadow-card);
     backdrop-filter: none;
+    border-radius: var(--radius-lg);
+  }
+  .panel-raised {
+    background: var(--surface-raised);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      var(--glow-inner-strong),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      var(--shadow-card);
     border-radius: var(--radius-lg);
   }
   .panel-subtle {
     background: var(--surface);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--glow-inner);
     border-radius: var(--radius-lg);
   }
   .eyebrow {
     font-size: 0.72rem;
+    font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -154,23 +181,38 @@
     font-size: 0.92rem;
     font-weight: 500;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
     transition:
       transform var(--duration-fast) var(--ease-out),
       opacity var(--duration-fast),
       background var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
   }
-  button:active { transform: scale(0.97); }
-  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  button:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+  button:active { transform: scale(0.97); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
   button.secondary {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.04);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--glow-inner);
+  }
+  button.secondary:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
   }
   button.ghost {
     background: transparent;
     color: var(--text-dim);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+  }
+  button.ghost:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
   }
   .btn-row {
     display: flex;
@@ -230,24 +272,38 @@
     width: 100%;
     padding: 18px 20px 18px 16px;
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.045);
+    background: var(--surface-raised);
     color: var(--text);
-    border: none;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow:
+      var(--glow-inner-strong),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      var(--shadow-card);
     display: grid;
     grid-template-columns: 56px 1fr 20px;
     align-items: center;
     gap: 16px;
     text-align: left;
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+  .mode-row:hover {
+    background: var(--surface-elevated);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .mode-row:active {
+    background: var(--surface-raised);
   }
   .mode-icon {
     width: 56px;
     height: 56px;
     display: grid;
     place-items: center;
-    color: var(--text);
-    background: rgba(255, 255, 255, 0.04);
-    border: none;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: 18px;
   }
   .mode-icon svg,
@@ -268,12 +324,28 @@
   .mode-title {
     font-size: clamp(1.36rem, 3.6vw, 1.72rem);
     letter-spacing: -0.05em;
-    font-weight: 500;
+    font-weight: 600;
   }
   .mode-arrow {
-    color: rgba(255, 255, 255, 0.22);
-    font-size: 1rem;
-    line-height: 1;
+    color: rgba(255, 255, 255, 0.18);
+    display: grid;
+    place-items: center;
+  }
+  .mode-arrow svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+  .mode-row:hover .mode-arrow {
+    color: rgba(255, 255, 255, 0.35);
+  }
+  .mode-row:hover .mode-arrow svg {
+    transform: translateX(2px);
   }
   .menu-tools {
     display: flex;
@@ -298,18 +370,27 @@
     place-items: center;
     background: rgba(255, 255, 255, 0.04);
     color: var(--text-muted);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 16px;
     padding: 0;
     font-size: 0;
     line-height: 1;
     transform: none;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: var(--glow-inner);
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast);
+  }
+  button.picker-chip:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.08);
   }
   button.picker-chip.active {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: var(--glow-inner-strong);
   }
   button.picker-chip svg {
     width: 18px;
@@ -320,22 +401,23 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  button.picker-chip:hover,
-  button.picker-chip:active,
-  .mode-row:hover,
-  .mode-row:active {
+  button.picker-chip:active {
     transform: none;
     opacity: 1;
   }
   .utility-history {
     flex: 0 0 auto;
     background: rgba(255, 255, 255, 0.04);
-    border: none;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--glow-inner);
   }
   button.secondary.utility-history {
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.04);
+  }
+  button.secondary.utility-history:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.08);
   }
   .utility-history svg {
     width: 18px;
@@ -359,7 +441,7 @@
   .countdown-num {
     font-size: clamp(6rem, 28vw, 9rem);
     line-height: 0.92;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.08em;
     color: var(--text);
   }
@@ -476,6 +558,7 @@
     font-size: clamp(1.8rem, 4.8vw, 2.6rem);
     line-height: 1;
     letter-spacing: -0.06em;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
   .pick-readout-wrap { display: none; }
@@ -502,7 +585,10 @@
     min-width: 0;
     background: var(--surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: none;
+    box-shadow:
+      var(--glow-inner),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      var(--shadow-card);
     border-radius: var(--radius-lg);
   }
   .stage-panel {
@@ -567,7 +653,13 @@
     border-radius: 999px;
     background: var(--gray-12);
     color: var(--gray-1);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+  .confirm-btn:hover:not(:disabled) {
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.32), 0 0 0 2px rgba(255, 255, 255, 0.12);
   }
   .confirm-btn svg {
     width: 24px;
@@ -733,11 +825,12 @@
     gap: var(--space-3);
   }
   .results-hero {
-    padding: clamp(var(--space-5), 5vw, var(--space-7));
+    padding: 0;
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-2);
     cursor: pointer;
-    background: var(--surface);
+    background: transparent;
+    border: none;
     box-shadow: none;
   }
   .results-hero-head {
@@ -754,8 +847,13 @@
     font-size: clamp(4rem, 14vw, 6.6rem);
     line-height: 0.88;
     letter-spacing: -0.08em;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
+    transition: color var(--duration-slow) var(--ease-out);
   }
+  .total-score.tier-elite { color: var(--tier-elite); }
+  .total-score.tier-strong { color: var(--tier-strong); }
+  .total-score.tier-solid { color: var(--tier-solid); }
   .total-label {
     font-size: 0.78rem;
     color: var(--text-muted);
@@ -769,9 +867,14 @@
     background: transparent;
     color: var(--text-dim);
     font-size: 0.78rem;
+    font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    transition: color var(--duration-slow) var(--ease-out);
   }
+  .score-tier.tier-elite { color: var(--tier-elite); }
+  .score-tier.tier-strong { color: var(--tier-strong); }
+  .score-tier.tier-solid { color: var(--tier-solid); }
   .analysis-hint {
     color: var(--text-muted);
     font-size: 0.82rem;
@@ -796,17 +899,30 @@
     background: var(--surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
-    box-shadow: none;
+    box-shadow: var(--glow-inner), var(--shadow-card);
     cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+    animation: card-in var(--duration-slow) var(--ease-out) backwards;
+  }
+  .result-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
   }
   .result-card > div:first-child {
     grid-column: 1 / -1;
     width: 100%;
   }
-  .result-card.tier-elite { border-color: rgba(255, 255, 255, 0.18); }
-  .result-card.tier-strong { border-color: rgba(255, 255, 255, 0.12); }
+  .result-card.tier-elite {
+    border-color: color-mix(in srgb, var(--tier-elite) 30%, transparent);
+    box-shadow: var(--glow-inner), var(--shadow-card), inset 0 0 0 1px color-mix(in srgb, var(--tier-elite) 8%, transparent);
+  }
+  .result-card.tier-strong {
+    border-color: color-mix(in srgb, var(--tier-strong) 25%, transparent);
+    box-shadow: var(--glow-inner), var(--shadow-card), inset 0 0 0 1px color-mix(in srgb, var(--tier-strong) 6%, transparent);
+  }
   .result-card.tier-learning { border-color: rgba(255, 255, 255, 0.08); }
-  .result-card.tier-rough { opacity: 0.92; }
+  .result-card.tier-rough { opacity: 0.88; }
   .swatch-compare {
     position: relative;
     width: 100%;
@@ -864,21 +980,14 @@
   }
   .result-score {
     font-size: 1.35rem;
-    font-weight: 600;
+    font-weight: 700;
     min-width: 0;
     text-align: right;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.05em;
   }
   .result-score span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 52px;
-    padding: 8px 10px;
-    border-radius: 14px;
-    background: var(--surface-raised);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: inline;
   }
   .result-detail {
     color: var(--text-dim);
@@ -934,6 +1043,11 @@
     border-radius: 999px;
     display: inline-grid;
     place-items: center;
+    box-shadow: var(--glow-inner);
+  }
+  .results-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
   }
   .results-icon-btn svg {
     width: 20px;
@@ -951,7 +1065,10 @@
     display: grid;
     gap: var(--space-4);
     background: var(--surface);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 10px 24px rgba(0, 0, 0, 0.14);
+    box-shadow:
+      var(--glow-inner),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      var(--shadow-elevated);
   }
   .history-top {
     display: flex;
@@ -964,9 +1081,17 @@
     border-radius: 999px;
     display: inline-grid;
     place-items: center;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.03);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--glow-inner);
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
   }
   .icon-btn svg {
     width: 18px;
@@ -989,8 +1114,16 @@
     gap: var(--space-4);
     padding: 14px 16px;
     background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: var(--glow-inner);
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .history-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
   }
   .history-entry {
     display: flex;
@@ -1030,6 +1163,7 @@
   }
   .history-score {
     color: var(--text);
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.03em;
   }
@@ -1053,18 +1187,11 @@
   }
 
   @media (hover: hover) {
-    button:hover { opacity: 0.96; transform: scale(1.02); }
-    button.secondary:hover,
-    button.ghost:hover {
-      background: rgba(255, 255, 255, 0.03);
-      transform: scale(1.02);
+    button:hover:not(.mode-row):not(.picker-chip):not(.confirm-btn):not(.secondary):not(.ghost) {
+      opacity: 0.96;
     }
     .mode-row:hover {
       transform: translateY(-1px);
-      border-color: rgba(255, 255, 255, 0.12);
-    }
-    button.picker-chip:hover {
-      background: rgba(255, 255, 255, 0.06);
     }
     .picture-choice:hover {
       transform: translateY(-2px);
@@ -1115,8 +1242,82 @@
     }
   }
 
-  #pick, #results, #historyScreen {
+  #pick, #results, #historyScreen, #reveal {
     padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .reveal-shell {
+    width: min(100%, 560px);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .reveal-card {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .reveal-swatches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    aspect-ratio: 1.5;
+  }
+  .reveal-swatches > div {
+    min-height: 0;
+  }
+  .reveal-meta {
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .reveal-score-cluster {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+  .reveal-score-num {
+    font-size: clamp(2rem, 8vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.06em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .reveal-score-max {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .reveal-verdict {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .history-tabs {
+    display: flex;
+    gap: var(--space-2);
+  }
+  button.history-tab {
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    border: none;
+    font-size: 0.84rem;
+  }
+  button.history-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+  }
+  .history-colors {
+    display: flex;
+    gap: 2px;
+    margin-left: auto;
+  }
+  .history-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1158,7 +1359,7 @@
             <span class="mode-body">
               <span class="mode-title">Play</span>
             </span>
-            <span class="mode-arrow">→</span>
+            <span class="mode-arrow"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span>
           </button>
           <button class="mode-row" onclick="startGame('match')">
             <span class="mode-icon" aria-hidden="true">
@@ -1170,7 +1371,7 @@
             <span class="mode-body">
               <span class="mode-title">Match</span>
             </span>
-            <span class="mode-arrow">→</span>
+            <span class="mode-arrow"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span>
           </button>
           <button class="mode-row" onclick="startGame('picture')">
             <span class="mode-icon" aria-hidden="true">
@@ -1188,7 +1389,7 @@
             <span class="mode-body">
               <span class="mode-title">Picture It</span>
             </span>
-            <span class="mode-arrow">→</span>
+            <span class="mode-arrow"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></span>
           </button>
         </div>
         <div class="menu-tools">
@@ -1274,6 +1475,33 @@
   </div>
 </div>
 
+<!-- REVEAL -->
+<div id="reveal" class="screen">
+  <div class="reveal-shell">
+    <p class="eyebrow" id="revealProgress" style="text-align:center">1 / 5</p>
+    <div class="reveal-card">
+      <div class="reveal-swatches">
+        <div id="revealTarget"></div>
+        <div id="revealGuess"></div>
+      </div>
+      <div class="reveal-meta" onclick="toggleRevealDetail()" style="cursor:pointer">
+        <div class="reveal-score-cluster">
+          <div class="reveal-score-num" id="revealScore" tabindex="-1"></div>
+          <div class="reveal-score-max">/ 10</div>
+        </div>
+        <div class="reveal-verdict" id="revealVerdict"></div>
+      </div>
+      <div class="reveal-hsb" id="revealHSB" style="display:none;padding:0 var(--space-5) var(--space-4);font-size:0.78rem;color:var(--text-muted);font-variant-numeric:tabular-nums"></div>
+    </div>
+    <div class="btn-row" style="justify-content:space-between">
+      <button class="ghost icon-btn" onclick="goMenu()" aria-label="Quit round">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+      </button>
+      <button onclick="continueAfterReveal()">Continue</button>
+    </div>
+  </div>
+</div>
+
 <!-- RESULTS -->
 <div id="results" class="screen">
   <div class="results-shell">
@@ -1329,7 +1557,10 @@ Promise.race([
 ]).then(() => document.body.classList.add('fonts-ready'));
 
 // --- State ---
-let gameId, targetColors, guesses, currentPick, lastMode, pictureChoices, selectedChoice;
+let targetColors, guesses, currentPick, lastMode, pictureChoices, selectedChoice;
+let roundResults = [];
+let showHistoryMode = 'play';
+let memorizeTimer = null;
 let pickerType = localStorage.getItem('pickerType') || 'field';
 let currentHSB = { h: 180, s: 50, b: 50 };
 let showAdvanced = new URLSearchParams(window.location.search).has('advanced');
@@ -1343,7 +1574,10 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
   document.body.dataset.screen = id;
 }
-function goMenu() { showScreen('menu'); }
+function goMenu() {
+  if (memorizeTimer) { clearInterval(memorizeTimer); memorizeTimer = null; }
+  showScreen('menu');
+}
 
 function setPicker(type) {
   pickerType = type;
@@ -1423,17 +1657,17 @@ function pickEyebrow(mode) {
 }
 
 function scoreTierText(score) {
-  if (score >= 47) return 'Near perfect';
-  if (score >= 40) return 'Very strong eye';
-  if (score >= 32) return 'Solid eye';
-  if (score >= 22) return 'Learning curve';
+  if (score >= 42) return 'Near perfect';
+  if (score >= 35) return 'Very strong eye';
+  if (score >= 25) return 'Solid eye';
+  if (score >= 15) return 'Learning curve';
   return 'Early reps';
 }
 
 function resultTierClass(score) {
-  if (score >= 8.8) return 'tier-elite';
-  if (score >= 6.2) return 'tier-strong';
-  if (score >= 3.2) return 'tier-learning';
+  if (score >= 8.5) return 'tier-elite';
+  if (score >= 5.5) return 'tier-strong';
+  if (score >= 2.5) return 'tier-learning';
   return 'tier-rough';
 }
 
@@ -1469,26 +1703,178 @@ function formatHSBCompact(color) {
   return `H${Math.round(color.h)} S${Math.round(color.s)} B${Math.round(color.b)}`;
 }
 
+// --- Color Math (CIEDE2000 scoring, ported from Python) ---
+function hsbToRgb(h, s, b) {
+  const sN = s / 100, bN = b / 100;
+  const c = bN * sN;
+  const hp = h / 60;
+  const x = c * (1 - Math.abs(hp % 2 - 1));
+  const m = bN - c;
+  let r, g, bl;
+  if (hp < 1) { r = c; g = x; bl = 0; }
+  else if (hp < 2) { r = x; g = c; bl = 0; }
+  else if (hp < 3) { r = 0; g = c; bl = x; }
+  else if (hp < 4) { r = 0; g = x; bl = c; }
+  else if (hp < 5) { r = x; g = 0; bl = c; }
+  else { r = c; g = 0; bl = x; }
+  return [r + m, g + m, bl + m];
+}
+
+function srgbToLinear(c) {
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+
+function rgbToXyz(r, g, b) {
+  r = srgbToLinear(r); g = srgbToLinear(g); b = srgbToLinear(b);
+  return [
+    0.4124564 * r + 0.3575761 * g + 0.1804375 * b,
+    0.2126729 * r + 0.7151522 * g + 0.0721750 * b,
+    0.0193339 * r + 0.1191920 * g + 0.9503041 * b,
+  ];
+}
+
+function xyzToLab(x, y, z) {
+  const xn = 0.95047, yn = 1.0, zn = 1.08883;
+  function f(t) { return t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116; }
+  const fx = f(x / xn), fy = f(y / yn), fz = f(z / zn);
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+
+function hsbToLab(h, s, b) {
+  const [r, g, bl] = hsbToRgb(h, s, b);
+  const [x, y, z] = rgbToXyz(r, g, bl);
+  return xyzToLab(x, y, z);
+}
+
+function deltaE2000(lab1, lab2) {
+  const [L1, a1, b1] = lab1;
+  const [L2, a2, b2] = lab2;
+
+  const C1 = Math.sqrt(a1 * a1 + b1 * b1);
+  const C2 = Math.sqrt(a2 * a2 + b2 * b2);
+  const Cavg = (C1 + C2) / 2;
+  const Cavg7 = Math.pow(Cavg, 7);
+  const G = 0.5 * (1 - Math.sqrt(Cavg7 / (Cavg7 + Math.pow(25, 7))));
+  const a1p = a1 * (1 + G);
+  const a2p = a2 * (1 + G);
+  const C1p = Math.sqrt(a1p * a1p + b1 * b1);
+  const C2p = Math.sqrt(a2p * a2p + b2 * b2);
+  const h1p = (Math.atan2(b1, a1p) * 180 / Math.PI + 360) % 360;
+  const h2p = (Math.atan2(b2, a2p) * 180 / Math.PI + 360) % 360;
+
+  const dLp = L2 - L1;
+  const dCp = C2p - C1p;
+  let dhp;
+  if (C1p * C2p === 0) dhp = 0;
+  else if (Math.abs(h2p - h1p) <= 180) dhp = h2p - h1p;
+  else if (h2p - h1p > 180) dhp = h2p - h1p - 360;
+  else dhp = h2p - h1p + 360;
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin(dhp / 2 * Math.PI / 180);
+
+  const Lpavg = (L1 + L2) / 2;
+  const Cpavg = (C1p + C2p) / 2;
+  let hpavg;
+  if (C1p * C2p === 0) hpavg = h1p + h2p;
+  else if (Math.abs(h1p - h2p) <= 180) hpavg = (h1p + h2p) / 2;
+  else if (h1p + h2p < 360) hpavg = (h1p + h2p + 360) / 2;
+  else hpavg = (h1p + h2p - 360) / 2;
+
+  const T = 1
+    - 0.17 * Math.cos((hpavg - 30) * Math.PI / 180)
+    + 0.24 * Math.cos(2 * hpavg * Math.PI / 180)
+    + 0.32 * Math.cos((3 * hpavg + 6) * Math.PI / 180)
+    - 0.20 * Math.cos((4 * hpavg - 63) * Math.PI / 180);
+
+  const SL = 1 + 0.015 * Math.pow(Lpavg - 50, 2) / Math.sqrt(20 + Math.pow(Lpavg - 50, 2));
+  const SC = 1 + 0.045 * Cpavg;
+  const SH = 1 + 0.015 * Cpavg * T;
+
+  const Cpavg7 = Math.pow(Cpavg, 7);
+  const RT = -Math.sin(60 * Math.exp(-Math.pow((hpavg - 275) / 25, 2)) * Math.PI / 180)
+    * 2 * Math.sqrt(Cpavg7 / (Cpavg7 + Math.pow(25, 7)));
+
+  const dE = Math.sqrt(
+    Math.pow(dLp / SL, 2) + Math.pow(dCp / SC, 2) + Math.pow(dHp / SH, 2)
+    + RT * (dCp / SC) * (dHp / SH)
+  );
+  return [dE, dLp, dCp, dHp];
+}
+
+function scoreFromDeltaE(de) {
+  return Math.round(10 / (1 + Math.pow(de / 12, 2.5)) * 100) / 100;
+}
+
+function hueDistance(h1, h2) {
+  const d = Math.abs(h1 - h2);
+  return d > 180 ? 360 - d : d;
+}
+
+const HUE_NAMES = [
+  [15, 'Red'], [40, 'Orange'], [65, 'Yellow'], [150, 'Green'],
+  [195, 'Cyan'], [250, 'Blue'], [295, 'Purple'], [330, 'Pink'], [360, 'Red'],
+];
+
+function hueName(h) {
+  for (const [boundary, name] of HUE_NAMES) {
+    if (h < boundary) return name;
+  }
+  return 'Red';
+}
+
+function scoreGuess(target, guess) {
+  const labT = hsbToLab(target.h, target.s, target.b);
+  const labG = hsbToLab(guess.h, guess.s, guess.b);
+  const [de, dLp, dCp, dHp] = deltaE2000(labT, labG);
+  let score = scoreFromDeltaE(de);
+
+  // Hue-recovery bonus: if hue is close, recover up to 40% of lost points.
+  // Rewards getting the right color family even when brightness/saturation drifts.
+  const hueDist = hueDistance(target.h, guess.h);
+  if (hueDist <= 25) {
+    const lost = 10 - score;
+    const recovery = 0.4 * (1 - hueDist / 25);
+    score = Math.round((score + lost * recovery) * 100) / 100;
+  }
+
+  return {
+    delta_e: Math.round(de * 10) / 10,
+    delta_l: Math.round(dLp * 10) / 10,
+    delta_c: Math.round(dCp * 10) / 10,
+    delta_h: Math.round(dHp * 10) / 10,
+    score,
+    target_name: hueName(target.h),
+    guess_name: hueName(guess.h),
+  };
+}
+
 // --- Game Flow ---
 async function startGame(mode) {
   lastMode = mode;
-  const res = await fetch('/api/game/start', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mode, picker_type: pickerType })
-  });
-  const data = await res.json();
-  gameId = data.game_id;
-  targetColors = data.target_colors;
-  pictureChoices = Array.isArray(data.choices) ? data.choices : [];
-  guesses = [];
-  currentPick = 0;
+  document.querySelectorAll('.mode-row').forEach(b => b.disabled = true);
+  try {
+    const res = await fetch('/api/game/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode, picker_type: pickerType })
+    });
+    if (!res.ok) throw new Error(`Server error ${res.status}`);
+    const data = await res.json();
+    targetColors = data.target_colors;
+    pictureChoices = Array.isArray(data.choices) ? data.choices : [];
+    guesses = [];
+    currentPick = 0;
+    roundResults = [];
 
-  if (mode === 'play') {
-    runCountdown();
-  } else {
-    // Match and picture modes skip memorize and go straight to picking.
-    startPicking();
+    if (mode === 'play') {
+      runCountdown();
+    } else {
+      startPicking();
+    }
+  } catch (e) {
+    console.warn('Failed to start game:', e);
+    goMenu();
+  } finally {
+    document.querySelectorAll('.mode-row').forEach(b => b.disabled = false);
   }
 }
 
@@ -1531,12 +1917,14 @@ function startMemorize() {
   fill.style.width = '100%';
   txt.textContent = '5s';
 
-  const iv = setInterval(() => {
+  if (memorizeTimer) clearInterval(memorizeTimer);
+  memorizeTimer = setInterval(() => {
     remaining -= 0.1;
     fill.style.width = (remaining / 5 * 100) + '%';
     txt.textContent = Math.ceil(remaining) + 's';
     if (remaining <= 0) {
-      clearInterval(iv);
+      clearInterval(memorizeTimer);
+      memorizeTimer = null;
       startPicking();
     }
   }, 100);
@@ -1584,17 +1972,12 @@ function updatePickUI() {
       <div class="picture-stage">
         <div class="picture-target">${formatHSBCompact(tc)}</div>
         <div class="picture-choices">${choices.map((c, i) =>
-          `<div class="picture-choice${selectedChoice === i ? ' selected' : ''}"
+          `<div class="picture-choice"
                 onclick="selectChoice(${i})"
                 style="background:${hsbToHsl(c.h, c.s, c.b)}"></div>`
         ).join('')}</div>
-        <div class="picture-stage-actions">
-          <button class="confirm-btn" onclick="confirmPick()" aria-label="Confirm choice" ${selectedChoice < 0 ? 'disabled' : ''}>
-            ${confirmIconMarkup()}
-          </button>
-        </div>
       </div>`;
-    document.getElementById('confirmBtn').disabled = selectedChoice < 0;
+    document.getElementById('confirmBtn').style.display = 'none';
   } else if (lastMode === 'match') {
     const tc = targetColors[currentPick];
     const targetCss = hsbToHsl(tc.h, tc.s, tc.b);
@@ -1625,43 +2008,145 @@ function updatePickUI() {
 }
 
 function confirmPick() {
+  let guess;
   if (lastMode === 'picture') {
     if (selectedChoice < 0) return;
     const chosen = pictureOptionsFor(currentPick)[selectedChoice];
-    guesses.push({ h: chosen.h, s: chosen.s, b: chosen.b });
+    guess = { h: chosen.h, s: chosen.s, b: chosen.b };
   } else {
-    guesses.push({ ...currentHSB });
+    guess = { ...currentHSB };
   }
-  currentPick++;
-  if (currentPick >= 5) {
-    submitGuesses();
-  } else if (lastMode === 'play') {
-    startMemorize();
-  } else if (lastMode === 'picture') {
-    selectedChoice = -1;
-    document.getElementById('swatchArea').innerHTML = '';
-    updatePickUI();
-  } else { // match
-    currentHSB = { h: 180, s: 50, b: 50 };
-    document.getElementById('swatchArea').innerHTML = '';
-    renderPicker();
-    updatePickUI();
-  }
+  guesses.push(guess);
+  const target = targetColors[currentPick];
+  const result = scoreGuess(target, guess);
+  result.target = target;
+  result.guess = guess;
+  roundResults.push(result);
+  showReveal(result, currentPick);
 }
 
 function selectChoice(idx) {
   selectedChoice = idx;
-  updatePickUI();
+  confirmPick();
 }
 
-async function submitGuesses() {
-  const res = await fetch('/api/game/submit', {
+function showReveal(result, roundIndex) {
+  showScreen('reveal');
+  document.getElementById('revealProgress').textContent = `${roundIndex + 1} / 5`;
+  const scoreEl = document.getElementById('revealScore');
+  scoreEl.className = 'reveal-score-num';
+  scoreEl.style.color = hsbToHsl(result.target.h, result.target.s, result.target.b);
+  const target = result.score;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scoreEl.textContent = target.toFixed(1);
+  } else {
+    const duration = Math.min(500, Math.max(200, target * 50));
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      scoreEl.textContent = (eased * target).toFixed(1);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  document.getElementById('revealTarget').style.background =
+    hsbToHsl(result.target.h, result.target.s, result.target.b);
+  document.getElementById('revealGuess').style.background =
+    hsbToHsl(result.guess.h, result.guess.s, result.guess.b);
+  document.getElementById('revealVerdict').textContent = colorFeedbackText(result.score);
+  const hsbEl = document.getElementById('revealHSB');
+  hsbEl.style.display = 'none';
+  hsbEl.innerHTML = revealSliders(result.target, result.guess);
+  scoreEl.focus();
+}
+
+function revealSliders(target, guess) {
+  function pin(pct, color, label) {
+    return `<div style="position:absolute;left:${pct}%;top:50%;transform:translate(-50%,-50%)" title="${label}">` +
+      `<div style="width:10px;height:10px;border-radius:50%;background:${color};border:2px solid ${color === '#fff' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.3)'};box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>` +
+      `</div>`;
+  }
+  function bar(label, max, tVal, gVal, gradient) {
+    const tPct = (tVal / max * 100).toFixed(1);
+    const gPct = (gVal / max * 100).toFixed(1);
+    return `<div style="display:grid;grid-template-columns:16px 1fr;align-items:center;gap:8px">` +
+      `<span style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase">${label}</span>` +
+      `<div style="position:relative;height:8px;border-radius:4px;background:${gradient}">` +
+      pin(tPct, '#fff', `Target: ${Math.round(tVal)}`) +
+      pin(gPct, 'rgba(255,255,255,0.45)', `Guess: ${Math.round(gVal)}`) +
+      `</div></div>`;
+  }
+  const hueGrad = 'linear-gradient(90deg,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))';
+  const satGrad = `linear-gradient(90deg,hsl(${target.h},0%,50%),hsl(${target.h},100%,50%))`;
+  const briGrad = `linear-gradient(90deg,#000,hsl(${target.h},${target.s}%,50%))`;
+  return `<div style="display:grid;gap:8px">` +
+    bar('H', 360, target.h, guess.h, hueGrad) +
+    bar('S', 100, target.s, guess.s, satGrad) +
+    bar('B', 100, target.b, guess.b, briGrad) +
+    `</div>`;
+}
+
+function toggleRevealDetail() {
+  const el = document.getElementById('revealHSB');
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+function continueAfterReveal() {
+  currentPick++;
+  if (currentPick >= 5) {
+    persistAndShowResults();
+  } else if (lastMode === 'play') {
+    startMemorize();
+  } else {
+    startPicking();
+  }
+}
+
+function persistAndShowResults() {
+  const total = Math.round(roundResults.reduce((s, r) => s + r.score, 0) * 100) / 100;
+  // Fire-and-forget persist to server
+  fetch('/api/game/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ game_id: gameId, guesses })
+    body: JSON.stringify({
+      mode: lastMode,
+      picker_type: pickerType,
+      target_colors: targetColors,
+      guesses: guesses,
+      scores: roundResults.map(r => r.score),
+      total_score: total,
+    }),
+  }).catch(e => console.warn('Game persist failed:', e));
+  // Save to localStorage
+  saveToHistory({
+    mode: lastMode,
+    picker_type: pickerType,
+    date: new Date().toISOString(),
+    total_score: total,
+    results: roundResults,
+    target_colors: targetColors,
   });
-  const data = await res.json();
-  showResults(data);
+  showResults({ results: roundResults, total_score: total });
+}
+
+function saveToHistory(game) {
+  try {
+    const all = JSON.parse(localStorage.getItem('gameHistory') || '[]');
+    all.unshift(game);
+    // Keep top 20 per mode by score
+    const byMode = {};
+    all.forEach(g => {
+      if (!byMode[g.mode]) byMode[g.mode] = [];
+      byMode[g.mode].push(g);
+    });
+    const kept = [];
+    for (const mode in byMode) {
+      byMode[mode].sort((a, b) => b.total_score - a.total_score);
+      kept.push(...byMode[mode].slice(0, 20));
+    }
+    localStorage.setItem('gameHistory', JSON.stringify(kept));
+  } catch (e) {}
 }
 
 // --- Picker Rendering ---
@@ -1804,10 +2289,19 @@ function showResults(data) {
   document.getElementById('resultsMeta').textContent = lastMode === 'picture'
     ? `${modeLabel(lastMode)} · no picker`
     : `${modeLabel(lastMode)} · ${pickerLabel(pickerType)} picker`;
-  document.getElementById('scoreTier').textContent = scoreTierText(data.total_score);
+  const tierEl = document.getElementById('scoreTier');
+  tierEl.textContent = scoreTierText(data.total_score);
+  tierEl.className = 'score-tier';
+  if (data.total_score >= 42) tierEl.classList.add('tier-elite');
+  else if (data.total_score >= 35) tierEl.classList.add('tier-strong');
+  else if (data.total_score >= 25) tierEl.classList.add('tier-solid');
   updateAdvancedHint();
 
   const scoreEl = document.getElementById('totalScore');
+  scoreEl.className = 'total-score';
+  if (data.total_score >= 42) scoreEl.classList.add('tier-elite');
+  else if (data.total_score >= 35) scoreEl.classList.add('tier-strong');
+  else if (data.total_score >= 25) scoreEl.classList.add('tier-solid');
   const target = data.total_score;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     scoreEl.textContent = target.toFixed(1);
@@ -1866,16 +2360,7 @@ function showResults(data) {
           <div class="result-names">${r.target_name} to ${r.guess_name}</div>
         </div>
         <div class="${detailClass}">
-          <div class="result-detail">
-            ${formatHSBCompact(r.target)}<br>
-            ${formatHSBCompact(r.guess)}<br>
-            ΔE00 ${r.delta_e}
-          </div>
-          <div class="delta-grid">
-            ${deltaMeter('L', r.delta_l)}
-            ${deltaMeter('C', r.delta_c)}
-            ${deltaMeter('H', r.delta_h)}
-          </div>
+          ${revealSliders(r.target, r.guess)}
         </div>
       </div>
       <div class="result-score"><span>${r.score.toFixed(1)}</span></div>`;
@@ -1905,39 +2390,74 @@ function colorFeedbackText(score) {
 }
 
 function totalFeedbackText(score) {
-  if (score >= 47) return 'Near-perfect perception. You are reading tiny differences without forcing it.';
-  if (score >= 40) return 'Very strong round. Your eye is already making fine-grain corrections.';
-  if (score >= 32) return 'Solid round. You are seeing the structure, even if a few channels still drift.';
-  if (score >= 22) return 'Useful reps. The misses are readable enough to teach from.';
+  if (score >= 42) return 'Near-perfect perception. You are reading tiny differences without forcing it.';
+  if (score >= 35) return 'Very strong round. Your eye is already making fine-grain corrections.';
+  if (score >= 25) return 'Solid round. You are seeing the structure, even if a few channels still drift.';
+  if (score >= 15) return 'Useful reps. The misses are readable enough to teach from.';
   return 'Good training material. The analysis below should make the misses concrete.';
 }
 
-// --- History ---
-async function showHistory() {
+// --- History (localStorage) ---
+function showHistory() {
   showScreen('historyScreen');
-  const res = await fetch('/api/history');
-  const data = await res.json();
+  let all;
+  try { all = JSON.parse(localStorage.getItem('gameHistory') || '[]'); }
+  catch (e) { all = []; }
+
+  const modes = ['play', 'match', 'picture'];
+  const activeMode = showHistoryMode;
+  const filtered = all
+    .filter(g => g.mode === activeMode)
+    .sort((a, b) => b.total_score - a.total_score);
+
   const list = document.getElementById('historyList');
+  const tabs = modes.map(m =>
+    `<button class="history-tab${m === activeMode ? ' active' : ''}" onclick="switchHistoryMode('${m}')">${modeLabel(m)}</button>`
+  ).join('');
 
-  if (data.length === 0) {
-    list.innerHTML = '<div class="panel-subtle" style="padding:var(--space-5);text-align:center;color:var(--text-muted);">No rounds yet.</div>';
-    return;
-  }
-
-  list.innerHTML = data.map(g => {
-    const d = new Date(g.created_at);
-    const time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return `<div class="history-row">
-      <div class="history-entry">
-        ${modeIconMarkup(g.mode, 'history-icon')}
-        <div class="history-meta">
-          <span class="history-mode">${modeLabel(g.mode)}</span>
-          <span class="history-sub">${time}</span>
+  let content = `<div class="history-tabs">${tabs}</div>`;
+  if (filtered.length === 0) {
+    content += '<div class="panel-subtle" style="padding:var(--space-5);text-align:center;color:var(--text-muted);">No rounds yet.</div>';
+  } else {
+    content += filtered.map((g, i) => {
+      const d = new Date(g.date);
+      const time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const colors = (g.target_colors || []).map(c =>
+        `<div class="history-color-dot" style="background:${hsbToHsl(c.h, c.s, c.b)}"></div>`
+      ).join('');
+      return `<div class="history-row" onclick="viewHistoryGame(${i}, '${g.mode}')" style="cursor:pointer">
+        <div class="history-entry">
+          ${modeIconMarkup(g.mode, 'history-icon')}
+          <div class="history-meta">
+            <span class="history-mode">${modeLabel(g.mode)}</span>
+            <span class="history-sub">${time}</span>
+          </div>
         </div>
-      </div>
-      <div class="history-score">${g.total_score.toFixed(1)}</div>
-    </div>`;
-  }).join('');
+        <div class="history-colors">${colors}</div>
+        <div class="history-score">${g.total_score.toFixed(1)}</div>
+      </div>`;
+    }).join('');
+  }
+  list.innerHTML = content;
+}
+
+function switchHistoryMode(mode) {
+  showHistoryMode = mode;
+  showHistory();
+}
+
+function viewHistoryGame(idx, mode) {
+  let all;
+  try { all = JSON.parse(localStorage.getItem('gameHistory') || '[]'); }
+  catch (e) { return; }
+  const filtered = all
+    .filter(g => g.mode === mode)
+    .sort((a, b) => b.total_score - a.total_score);
+  const game = filtered[idx];
+  if (!game) return;
+  lastMode = game.mode;
+  if (game.picker_type) pickerType = game.picker_type;
+  showResults({ results: game.results, total_score: game.total_score });
 }
 
 updateAdvancedHint();
