@@ -17,7 +17,7 @@ Color matching decomposes into separable skills:
 | **Encoding** | Color appearance scaling | Consciously decomposing a perceived color into HSB parameters. Research shows untrained observers perceive color holistically — dimensional decomposition is a genuinely difficult learned skill |
 | **Decoding** | Color visualization | HSB parameters → predicting the color. Encoding's inverse — mentally simulating what a parametric description looks like |
 | **Retention** | Delayed reproduction | Holding a perceived color in working memory across a delay. The full pipeline is encode → maintain → retrieve; the maintenance phase is the bottleneck. During the delay, color memories drift toward category prototypes ("blue", "green") — parametric encoding counteracts this drift |
-| **Context** | Simultaneous contrast awareness | Recognizing when surrounding colors shift perceived appearance. Core of Albers' *Interaction of Color* curriculum. Currently a gap — no mode targets this |
+| **Context** | Simultaneous contrast awareness | Recognizing when surrounding colors shift perceived appearance. Core of Albers' *Interaction of Color* curriculum |
 
 ### Adjacent skills
 
@@ -40,4 +40,5 @@ Each mode **emphasizes** a skill — not pure isolation (that gets clinical), bu
 | **Name It** | Idea | Encoding (vocabulary) | Picker, visual feedback (commit before seeing answer) | See color → pick its name from choices (cerulean, burnt sienna, etc.) → reveal correct name + HSB values. Builds color vocabulary |
 | **Read It** | Idea | Encoding (parametric) | Picker, visual feedback (commit before seeing answer) | See color → classify into HSB range buckets (e.g. warm/cool, high/low sat) → reveal answer + color name. Difficulty scales from coarse buckets to narrow ranges |
 | **Picture It** | Idea | Decoding | Perception, picker (multiple choice) | Given HSB values → pick the matching color from choices → reveal answer. Encoding's inverse |
+| **Judge It** | Idea | Context | Perception (confound is surround, not delta-E) | Target on neutral background → pick the match from 4 swatches on a colored surround → reveal strips backgrounds to show true colors. Difficulty scales from strong surrounds + spread choices to subtle surrounds + close choices to no neutral reference |
 | **Explore** | Idea | None (engagement) | Everything (not scored) | Color + topic → image search |

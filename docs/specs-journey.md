@@ -37,6 +37,7 @@ Menu → Countdown → Memorize → Pick → Results
 - **Play:** preview swatch fills available space — no target visible, recreate from memory
 - **Match:** target and guess swatches side-by-side (equal size, labeled "Target" / "Your guess"), converge by eye
 - **Picture It:** target shown as HSB text (e.g. "H210° S80% B60%") — pick matching color from 4 choices (no picker)
+- **Judge It:** target swatch on neutral gray background at top. 4 choice swatches on a colored surround below. Pick the match — surround shifts how all choices look. Reveal dissolves backgrounds to neutral, showing true colors.
 - **Play/Match:** Picker (field or sliders, per Menu setting)
 - Confirm button → advances to next color, or Results after color 5
 - Pick screen fills full viewport width; picker controls constrained to 480px

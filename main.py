@@ -211,7 +211,7 @@ def generate_colors(n: int = 5) -> list[dict]:
 
 
 def generate_distractors(target: dict, n: int = 3) -> list[dict]:
-    """Generate n distractor colors for multiple choice (dial mode).
+    """Generate n distractor colors for multiple choice (picture mode).
 
     Distractors are ΔE76 15–50 from target (plausible but distinguishable)
     and ΔE76 ≥15 from each other.
@@ -268,7 +268,7 @@ def hue_name(h: float) -> str:
 
 
 class StartRequest(BaseModel):
-    mode: str = "play"  # 'play', 'match', or 'dial'
+    mode: str = "play"  # 'play', 'match', or 'picture'
     picker_type: str = "field"  # 'sliders' or 'field'
 
 
@@ -314,7 +314,7 @@ async def start_game(req: StartRequest):
 
     result = {"game_id": game_id, "target_colors": colors}
 
-    if req.mode == "dial":
+    if req.mode == "picture":
         choices = []
         for color in colors:
             options = [color] + generate_distractors(color, 3)
