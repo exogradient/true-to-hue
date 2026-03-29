@@ -13,10 +13,21 @@ Color matching decomposes into separable skills:
 
 | Skill | Scientific basis | What it is |
 |-------|-----------------|-----------|
-| **Perception** | Chromatic discrimination | Detecting small color differences across hue, saturation, and lightness. Non-uniform across color space — threshold varies by region |
+| **Perception** | Chromatic discrimination | Detecting small color differences across hue, saturation, and lightness. Non-uniform across color space — threshold varies by region. Training is hue-specific: improving discrimination in blue-green does not transfer to red-orange |
 | **Encoding** | Color appearance scaling | Consciously decomposing a perceived color into HSB parameters. Research shows untrained observers perceive color holistically — dimensional decomposition is a genuinely difficult learned skill |
 | **Decoding** | Color visualization | HSB parameters → predicting the color. Encoding's inverse — mentally simulating what a parametric description looks like |
-| **Retention** | Delayed reproduction | Holding a perceived color in working memory across a delay. The full pipeline is encode → maintain → retrieve; the maintenance phase is the bottleneck |
+| **Retention** | Delayed reproduction | Holding a perceived color in working memory across a delay. The full pipeline is encode → maintain → retrieve; the maintenance phase is the bottleneck. During the delay, color memories drift toward category prototypes ("blue", "green") — parametric encoding counteracts this drift |
+| **Context** | Simultaneous contrast awareness | Recognizing when surrounding colors shift perceived appearance. Core of Albers' *Interaction of Color* curriculum. Currently a gap — no mode targets this |
+
+### Adjacent skills
+
+Not targeted by the game but relevant to the landscape:
+
+| Skill | Scientific basis | Relation |
+|-------|-----------------|----------|
+| **Categorization** | Categorical color perception | Parallel to Encoding — coarser (discrete labels vs continuous parameters) but faster. Vocabulary expansion literally shifts discrimination at category boundaries (Sapir-Whorf). Name It mode trains this. Labels also anchor Retention — they resist decay where metric details fade |
+| **Color mixing** | Subtractive/additive synthesis | Predicting results of combining colors. Requires Encoding + Decoding + material knowledge. Different domain — empirical, not parametric |
+| **Color harmony** | Color combination aesthetics | Evaluative, not perceptual. Empirical evidence for traditional rules (complementary, triadic) is weaker than assumed. Engagement feature, not a training target |
 
 ## Modes
 
