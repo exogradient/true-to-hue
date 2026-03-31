@@ -1,7 +1,7 @@
 {
   "name": "splash of hue",
   "short_name": "Splash Hue",
-  "description": "Color memory game that teaches color perception",
+  "description": "Unleash your color superpower",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#08090b",

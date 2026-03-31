@@ -1,7 +1,7 @@
 ---
 title: Milestones
 description: Shipped capability inflection points — what became possible, what it proved, what it unblocked.
-summary: "Alpha complete — three modes, calibrated scoring, resilience, analytics. Beta in progress: homepage redesign, frontend polish, new modes."
+summary: "All five modes playable, OG social preview shipped. Beta nearing completion: design pass and share remaining."
 ---
 
 ## Beta release `in-progress`
@@ -22,11 +22,11 @@ All five modes playable, polished UX. The game is worth sharing broadly.
 - Call It mode (XKCD color survey 949 names, CIEDE2000 nearest-match, distance-based scoring, lazy LAB cache, 8 choices per round)
 - Split It mode (neutral sliders — no color preview/gradient hints, hue color dots, intensity dots, live value readouts, HSB reveal bars shown by default, CIEDE2000 scoring)
 - All five modes now playable — no more "Coming soon" cards
+- OG social preview (1200×630 image, Open Graph + Twitter Card meta tags, tagline "Unleash your color superpower")
 
 **Remaining:**
 - Design pass — results reveal order, picker toggle, adaptive overlay, directional transitions, confirm button layout, low-score empathy, history empty state
 - Text-only share (navigator.share / clipboard + toast)
-- Social og image
 
 ## 2026-03-30 — Alpha release `completed`
 

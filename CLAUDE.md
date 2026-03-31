@@ -2,7 +2,7 @@
 
 # splash of hue
 
-Color memory game that teaches color perception.
+Color memory game. Unleash your color superpower.
 
 ## Stack & Architecture
 - Runtime: Python 3.13+, uv, FastAPI, uvicorn
