@@ -452,6 +452,9 @@
     gap: var(--space-2);
     text-shadow: 0 1px 4px rgba(0,0,0,0.7);
   }
+  .memorize-overlay.on-dark {
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
   .memorize-pill {
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-pill);
@@ -461,6 +464,10 @@
     font-size: 0.76rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+  }
+  .on-dark .memorize-pill {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.25);
   }
   .memorize-pill,
   #timerText {
@@ -1322,7 +1329,7 @@
 
   .history-shell {
     width: min(100%, 760px);
-    padding: clamp(var(--space-5), 5vw, var(--space-7));
+    padding: clamp(var(--space-3), 4vw, var(--space-7));
     display: grid;
     gap: var(--space-4);
     background: var(--surface);
@@ -1330,6 +1337,7 @@
       var(--glow-inner),
       inset 0 0 0 1px rgba(255, 255, 255, 0.03),
       var(--shadow-elevated);
+    overflow: hidden;
   }
   .history-top {
     display: flex;
@@ -1635,14 +1643,20 @@
   .history-tabs {
     display: flex;
     gap: var(--space-2);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .history-tabs::-webkit-scrollbar { display: none; }
   button.history-tab {
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.04);
     color: var(--text-muted);
     border: none;
     font-size: 0.84rem;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
   button.history-tab.active {
     background: rgba(255, 255, 255, 0.1);
@@ -2439,10 +2453,13 @@ function runCountdown() {
 function startMemorize() {
   analytics.memorizeStarted();
   showScreen('memorize');
-  document.getElementById('memorizeLabel').textContent = `Color ${currentPick + 1} of 5 — memorize!`;
   const grid = document.getElementById('memorizeGrid');
   grid.innerHTML = '';
   const c = targetColors[currentPick];
+  document.getElementById('memorizeLabel').textContent = `Color ${currentPick + 1} of 5 — memorize!`;
+  // Adaptive overlay: lighten pill on dark targets so text stays readable
+  const overlay = document.getElementById('memorize').querySelector('.memorize-overlay');
+  overlay.classList.toggle('on-dark', c.b < 40 || (c.b < 55 && c.s < 30));
   const div = document.createElement('div');
   div.className = 'color-swatch';
   div.style.background = hsbToHsl(c.h, c.s, c.b);
