@@ -44,13 +44,25 @@ Client generates colors and scores locally — no server round-trip to start a g
 - Persists pre-scored results. No server-side scoring — client owns CIEDE2000 computation.
 - Server-side scoring returns in Phase 3 (challenges) for competitive truth.
 
-**GET /api/history** — removed. Personal history lives in localStorage. Endpoint returns in Phase 2 as a leaderboard.
+**POST /api/challenge** — create a challenge
+- Request: `{ mode, target_colors: [{h,s,b} x5], name, guesses: [{h,s,b} x5], scores: [float x5], total_score: float }`
+- Response: `{ code, mode, target_colors, entries: [{name, total_score, scores, created_at}] }`
+- Generates 6-char Crockford Base32 code. Stores challenge + creator's entry atomically.
+
+**GET /api/challenge/{code}** — fetch challenge + leaderboard
+- Response: `{ code, mode, target_colors, entries: [{name, total_score, scores, created_at}] }`
+- Code normalized: uppercase, I→1, L→1, O→0, dashes stripped. 404 if not found.
+
+**POST /api/challenge/{code}** — submit score to challenge
+- Request: `{ name, guesses: [{h,s,b} x5], scores: [float x5], total_score: float }`
+- Response: same as GET (updated leaderboard)
+- Validates: challenge exists, entry count < 20, name unique per challenge. 409 on conflict.
 
 ## Database
 
-**Now:** `/tmp/games.db` (SQLite) — ephemeral, works within warm serverless instances. History may be lost on cold starts. Acceptable because history is not a core feature yet.
+**Games:** `/tmp/games.db` (SQLite) — ephemeral, works within warm serverless instances. History may be lost on cold starts. Acceptable because history is not a core feature yet.
 
-**Next:** Turso (LibSQL) — persistent, SQLite-compatible, edge-distributed. Drop-in replacement when persistence matters.
+**Challenges:** Turso (LibSQL) in production via HTTP API (`TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`). Falls back to local SQLite `data/challenges.db` when env vars absent. See `design-sharing` for edge cases.
 
 **Schema (current):**
 
@@ -67,17 +79,27 @@ CREATE TABLE games (
 );
 ```
 
-**Schema evolution** (see `design-log` for rationale):
+**Challenge schema** (separate DB from games — `design-sharing`):
 
-```mermaid
-graph LR
-    A["Phase 1: games"] --> B["Phase 2: + display_name column"]
-    B --> C["Phase 3: + challenges table\ngames.challenge_id FK"]
+```sql
+CREATE TABLE challenges (
+    code TEXT PRIMARY KEY,        -- 6-char Crockford Base32
+    mode TEXT NOT NULL,
+    target_colors TEXT NOT NULL,  -- JSON [{h,s,b}]
+    created_at TEXT NOT NULL,
+    last_played_at TEXT NOT NULL  -- for future TTL expiration
+);
+CREATE TABLE challenge_entries (
+    id TEXT PRIMARY KEY,
+    code TEXT NOT NULL,
+    name TEXT NOT NULL,           -- display name, max 20 chars
+    guesses TEXT NOT NULL,
+    scores TEXT NOT NULL,
+    total_score REAL NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE(code, name)
+);
 ```
-
-- **Phase 1 (now):** Anonymous solo games
-- **Phase 2 (leaderboards):** Display name (pseudonym) submitted with score. No accounts — name stored in localStorage, freely changeable. Server stores name as a plain field on the game row, not a FK.
-- **Phase 3 (multiplayer):** Shared challenges store target colors server-side, linking multiple game attempts. Display name prompted at join time. Restores server-side truth for competitive scoring while solo play stays stateless.
 
 ## Telemetry
 

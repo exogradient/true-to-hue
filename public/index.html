@@ -1581,10 +1581,10 @@
     }
   }
 
-  #pick, #results, #historyScreen, #reveal {
+  #pick, #results, #historyScreen, #reveal, #challenge {
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(var(--space-4), 4vw, var(--space-6)));
   }
-  #results, #historyScreen {
+  #results, #historyScreen, #challenge {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -1672,6 +1672,17 @@
     height: 12px;
     border-radius: 3px;
   }
+  .history-challenge-badge {
+    display: inline-block;
+    margin-left: var(--space-2);
+    padding: 1px 6px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+  }
 
   /* --- Error toast --- */
   .error-toast {
@@ -1708,6 +1719,199 @@
     border-radius: var(--radius-sm);
   }
 
+  /* ═══════ CHALLENGE / SHARE ═══════ */
+  #challenge {
+    padding-top: clamp(var(--space-5), 6vw, var(--space-8));
+  }
+  .challenge-shell {
+    width: min(100%, 560px);
+    margin: 0 auto;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .challenge-code-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .challenge-code {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--text);
+  }
+  .challenge-copy-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+  }
+  .challenge-copy-btn svg {
+    width: 16px; height: 16px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .challenge-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .challenge-colors {
+    display: flex;
+    gap: 3px;
+  }
+  .challenge-color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+  }
+  .challenge-leaderboard {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius);
+    box-shadow: var(--glow-inner);
+  }
+  .lb-row.lb-you {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .lb-rank {
+    width: 24px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .lb-name {
+    flex: 1;
+    font-weight: 500;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lb-score {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    flex-shrink: 0;
+  }
+  .lb-tier {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .lb-tier.tier-elite { color: var(--tier-elite); }
+  .lb-tier.tier-strong { color: var(--tier-strong); }
+  .lb-tier.tier-solid { color: var(--tier-solid); }
+
+  /* Name entry sheet */
+  .name-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+  .name-sheet.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .name-sheet-panel {
+    width: min(100%, 400px);
+    padding: var(--space-5);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-5));
+    background: var(--surface-elevated);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-elevated);
+    display: grid;
+    gap: var(--space-4);
+    transform: translateY(100%);
+    transition: transform var(--duration-fast) var(--ease-sheet);
+  }
+  .name-sheet.visible .name-sheet-panel {
+    transform: translateY(0);
+  }
+  .name-sheet-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .name-input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color var(--duration-fast);
+  }
+  .name-input:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .name-input::placeholder {
+    color: var(--text-muted);
+  }
+  .name-error {
+    font-size: 0.82rem;
+    color: #e86c6c;
+    min-height: 1.2em;
+  }
+
+  /* Success toast — shares base with .error-toast */
+  .success-toast {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-5));
+    left: 50%;
+    background: var(--surface-elevated);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-elevated);
+    z-index: 100;
+    opacity: 0;
+    translate: -50% 8px;
+    pointer-events: none;
+    transition: opacity var(--duration-normal) var(--ease-out), translate var(--duration-normal) var(--ease-out);
+  }
+  .success-toast.visible {
+    opacity: 1;
+    translate: -50% 0;
+    pointer-events: auto;
+  }
+  .success-toast-msg {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
@@ -1722,7 +1926,8 @@
     @keyframes hero-drift { 0%, 100% { background-position: 0% 50%; } }
     @keyframes title-shimmer { 0%, 100% { background-position: 0% 50%; } }
     body { transition: none; }
-    .error-toast { transition: none; }
+    .error-toast, .success-toast { transition: none; }
+    .name-sheet, .name-sheet-panel { transition: none; }
     button:active { transform: none; }
     button:hover {
       transform: none;
@@ -1865,6 +2070,9 @@
       <button class="secondary results-icon-btn" onclick="startGame(lastMode)" aria-label="Play again">
         <svg aria-hidden="true"><use href="/icons.svg#icon-replay"></use></svg>
       </button>
+      <button class="secondary results-icon-btn" onclick="shareGame()" aria-label="Share">
+        <svg aria-hidden="true"><use href="/icons.svg#icon-share"></use></svg>
+      </button>
     </div>
   </div>
 </div>
@@ -1879,6 +2087,46 @@
     </div>
     <div class="history-list" id="historyList"></div>
   </div>
+</div>
+
+<!-- CHALLENGE LEADERBOARD -->
+<div id="challenge" class="screen">
+  <div class="challenge-shell">
+    <div class="challenge-code-row">
+      <span class="challenge-code" id="challengeCodeText"></span>
+      <button class="secondary challenge-copy-btn" onclick="copyCode()" aria-label="Copy code">
+        <svg aria-hidden="true"><use href="/icons.svg#icon-copy"></use></svg>
+      </button>
+    </div>
+    <div class="challenge-meta">
+      <span class="eyebrow" id="challengeModeMeta"></span>
+      <div class="challenge-colors" id="challengeColors"></div>
+    </div>
+    <div class="challenge-leaderboard" id="challengeLeaderboard"></div>
+    <div class="btn-row results-actions">
+      <button class="secondary results-icon-btn" onclick="goMenu()" aria-label="Menu">
+        <svg aria-hidden="true"><use href="/icons.svg#icon-home"></use></svg>
+      </button>
+      <button class="secondary results-icon-btn" onclick="copyCode()" aria-label="Copy code">
+        <svg aria-hidden="true"><use href="/icons.svg#icon-copy"></use></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Name entry sheet -->
+<div class="name-sheet" id="nameSheet">
+  <div class="name-sheet-panel">
+    <p class="name-sheet-title">Enter your name</p>
+    <input type="text" class="name-input" id="nameInput" placeholder="Display name" maxlength="20" autocomplete="off" spellcheck="false">
+    <p class="name-error" id="nameError"></p>
+    <button id="nameSubmitBtn" onclick="submitName()">Share</button>
+  </div>
+</div>
+
+<!-- Success toast -->
+<div class="success-toast" id="successToast">
+  <span class="success-toast-msg" id="successToastMsg">Copied!</span>
 </div>
 
 <script>
@@ -1913,6 +2161,9 @@ try { pickerType = localStorage.getItem('pickerType') || 'field'; }
 catch { pickerType = 'field'; }
 let currentHSB = { h: 180, s: 50, b: 50 };
 let showAdvanced = new URLSearchParams(window.location.search).has('advanced');
+let challengeCode = null;
+let challengePlayerName = null;
+let _nameCallback = null;
 
 document.body.dataset.screen = 'menu';
 updatePickerControl();
@@ -1927,6 +2178,8 @@ function showScreen(id) {
 function goMenu() {
   analytics.gameAbandoned(lastMode, pickerType, guesses ? guesses.length : 0, document.body.dataset.screen);
   if (memorizeTimer) { clearInterval(memorizeTimer); memorizeTimer = null; }
+  challengeCode = null;
+  challengePlayerName = null;
   showScreen('menu');
 }
 
@@ -2400,6 +2653,8 @@ function retryLastMode() {
 
 // --- Game Flow ---
 function startGame(mode) {
+  challengeCode = null;
+  challengePlayerName = null;
   lastMode = mode;
   hideError();
   targetColors = generateColors(5);
@@ -2749,21 +3004,32 @@ function persistAndShowResults() {
     total_score: total,
     results: roundResults,
     target_colors: targetColors,
+    challenge_code: challengeCode || null,
   });
   showResults({ results: roundResults, total_score: total });
+  // If playing a challenge, auto-trigger name entry for submission
+  if (challengeCode && !challengePlayerName) {
+    setTimeout(function() {
+      showNameEntry(function(name) {
+        submitChallengeEntry(challengeCode, name);
+      }, 'Submit');
+    }, 600);
+  }
 }
 
 function saveToHistory(game) {
   try {
     const all = JSON.parse(localStorage.getItem('gameHistory') || '[]');
     all.unshift(game);
-    // Keep top 20 per mode by score
+    // Always keep challenge games; cap solo games at 20 per mode by score
+    const challenges = all.filter(g => g.challenge_code);
+    const solo = all.filter(g => !g.challenge_code);
     const byMode = {};
-    all.forEach(g => {
+    solo.forEach(g => {
       if (!byMode[g.mode]) byMode[g.mode] = [];
       byMode[g.mode].push(g);
     });
-    const kept = [];
+    const kept = [...challenges];
     for (const mode in byMode) {
       byMode[mode].sort((a, b) => b.total_score - a.total_score);
       kept.push(...byMode[mode].slice(0, 20));
@@ -3124,12 +3390,15 @@ function showHistory() {
       const colors = (g.target_colors || []).map(c =>
         `<div class="history-color-dot" style="background:${hsbToHsl(c.h, c.s, c.b)}"></div>`
       ).join('');
+      const badge = g.challenge_code
+        ? `<span class="history-challenge-badge">${g.challenge_code}</span>`
+        : '';
       return `<div class="history-row" onclick="viewHistoryGame(${i}, '${g.mode}')" style="cursor:pointer">
         <div class="history-entry">
           ${modeIconMarkup(g.mode, 'history-icon')}
           <div class="history-meta">
             <span class="history-mode">${modeLabel(g.mode)}</span>
-            <span class="history-sub">${time}</span>
+            <span class="history-sub">${time}${badge}</span>
           </div>
         </div>
         <div class="history-colors">${colors}</div>
@@ -3156,10 +3425,276 @@ function viewHistoryGame(idx, mode) {
   if (!game) return;
   lastMode = game.mode;
   if (game.picker_type) pickerType = game.picker_type;
-  showResults({ results: game.results, total_score: game.total_score });
+  targetColors = game.target_colors || [];
+  roundResults = game.results || [];
+  guesses = roundResults.map(function(r) { return r.guess; });
+  // If it's a challenge game, fetch the leaderboard
+  if (game.challenge_code) {
+    challengeCode = game.challenge_code;
+    var savedName = '';
+    try { savedName = localStorage.getItem('challengeName') || ''; } catch {}
+    challengePlayerName = savedName;
+    fetch('/api/challenge/' + encodeURIComponent(game.challenge_code))
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (data) showChallengeScreen(data);
+      else showResults({ results: game.results, total_score: game.total_score });
+    })
+    .catch(function() {
+      showResults({ results: game.results, total_score: game.total_score });
+    });
+  } else {
+    showResults({ results: game.results, total_score: game.total_score });
+  }
 }
 
+// --- Challenge / Share ---
+
+function shareGame() {
+  if (challengeCode && !challengePlayerName) {
+    showNameEntry(function(name) {
+      submitChallengeEntry(challengeCode, name);
+    }, 'Submit');
+  } else {
+    showNameEntry(function(name) {
+      createChallenge(name);
+    });
+  }
+}
+
+function showNameEntry(callback, label) {
+  _nameCallback = callback;
+  var input = document.getElementById('nameInput');
+  var savedName = '';
+  try { savedName = localStorage.getItem('challengeName') || ''; } catch {}
+  input.value = savedName;
+  document.getElementById('nameError').textContent = '';
+  document.getElementById('nameSheet').classList.add('visible');
+  document.getElementById('nameSubmitBtn').textContent = label || 'Share';
+  document.getElementById('nameSubmitBtn').disabled = false;
+  input.focus();
+  if (savedName) input.select();
+}
+
+function hideNameEntry() {
+  document.getElementById('nameSheet').classList.remove('visible');
+  _nameCallback = null;
+}
+
+function submitName() {
+  var name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    document.getElementById('nameError').textContent = 'Name is required';
+    return;
+  }
+  if (name.length > 20) {
+    document.getElementById('nameError').textContent = 'Max 20 characters';
+    return;
+  }
+  document.getElementById('nameSubmitBtn').disabled = true;
+  document.getElementById('nameError').textContent = '';
+  if (_nameCallback) _nameCallback(name);
+}
+
+function tagLastHistoryWithChallenge(code) {
+  try {
+    var all = JSON.parse(localStorage.getItem('gameHistory') || '[]');
+    if (all.length > 0 && !all[0].challenge_code) {
+      all[0].challenge_code = code;
+      localStorage.setItem('gameHistory', JSON.stringify(all));
+    }
+  } catch {}
+}
+
+function createChallenge(name) {
+  var total = roundResults.reduce(function(s, r) { return s + r.score; }, 0);
+  fetch('/api/challenge', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: lastMode,
+      target_colors: targetColors,
+      name: name,
+      guesses: guesses,
+      scores: roundResults.map(function(r) { return r.score; }),
+      total_score: Math.round(total * 100) / 100,
+    }),
+  })
+  .then(function(r) {
+    if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed'); });
+    return r.json();
+  })
+  .then(function(data) {
+    hideNameEntry();
+    challengeCode = data.code;
+    challengePlayerName = name;
+    try { localStorage.setItem('challengeName', name); } catch {}
+    tagLastHistoryWithChallenge(data.code);
+    showChallengeScreen(data);
+  })
+  .catch(function(e) {
+    document.getElementById('nameError').textContent = e.message || 'Could not create challenge';
+    document.getElementById('nameSubmitBtn').disabled = false;
+  });
+}
+
+function joinChallenge(code) {
+  fetch('/api/challenge/' + encodeURIComponent(code))
+  .then(function(r) {
+    if (!r.ok) {
+      if (r.status === 404) throw new Error('Challenge not found');
+      throw new Error('Failed to load challenge');
+    }
+    return r.json();
+  })
+  .then(function(data) {
+    challengeCode = data.code;
+    challengePlayerName = null;
+    startChallengeGame(data);
+  })
+  .catch(function(e) {
+    showError(e.message);
+  });
+}
+
+function startChallengeGame(data) {
+  lastMode = data.mode;
+  hideError();
+  targetColors = data.target_colors;
+
+  if (data.mode === 'picture') {
+    pictureChoices = targetColors.map(function(c) {
+      var options = [c].concat(generateDistractors(c, 3));
+      return shuffle(options);
+    });
+    callChoices = [];
+  } else if (data.mode === 'call') {
+    callChoices = targetColors.map(function(c) { return buildCallChoices(c); });
+    pictureChoices = [];
+  } else {
+    pictureChoices = [];
+    callChoices = [];
+  }
+  guesses = [];
+  currentPick = 0;
+  roundResults = [];
+  analytics.gameStarted(data.mode, pickerType);
+
+  if (data.mode === 'play') {
+    runCountdown();
+  } else {
+    startPicking();
+  }
+}
+
+function submitChallengeEntry(code, name) {
+  document.getElementById('nameSubmitBtn').disabled = true;
+  var total = roundResults.reduce(function(s, r) { return s + r.score; }, 0);
+  fetch('/api/challenge/' + encodeURIComponent(code), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name,
+      guesses: guesses,
+      scores: roundResults.map(function(r) { return r.score; }),
+      total_score: Math.round(total * 100) / 100,
+    }),
+  })
+  .then(function(r) {
+    if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed'); });
+    return r.json();
+  })
+  .then(function(data) {
+    hideNameEntry();
+    challengePlayerName = name;
+    try { localStorage.setItem('challengeName', name); } catch {}
+    showChallengeScreen(data);
+  })
+  .catch(function(e) {
+    document.getElementById('nameError').textContent = e.message || 'Could not submit';
+    document.getElementById('nameSubmitBtn').disabled = false;
+  });
+}
+
+function showChallengeScreen(data) {
+  showScreen('challenge');
+  document.getElementById('challengeCodeText').textContent = data.code;
+  document.getElementById('challengeModeMeta').textContent = modeLabel(data.mode);
+
+  var colors = (data.target_colors || []).map(function(c) {
+    return '<div class="challenge-color-dot" style="background:' + hsbToHsl(c.h, c.s, c.b) + '"></div>';
+  }).join('');
+  document.getElementById('challengeColors').innerHTML = colors;
+
+  var lb = document.getElementById('challengeLeaderboard');
+  lb.innerHTML = '';
+  (data.entries || []).forEach(function(entry, i) {
+    var isYou = challengePlayerName && entry.name === challengePlayerName;
+    var score = typeof entry.total_score === 'string' ? parseFloat(entry.total_score) : entry.total_score;
+    var tierCls = totalTierClass(score);
+    var row = document.createElement('div');
+    row.className = 'lb-row' + (isYou ? ' lb-you' : '');
+    row.innerHTML =
+      '<span class="lb-rank">' + (i + 1) + '</span>' +
+      '<span class="lb-name">' + escapeHtml(entry.name) + '</span>' +
+      '<span class="lb-tier ' + tierCls + '">' + scoreTierText(score) + '</span>' +
+      '<span class="lb-score">' + score.toFixed(1) + '</span>';
+    lb.appendChild(row);
+  });
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function copyCode() {
+  var code = document.getElementById('challengeCodeText').textContent;
+  if (!code) return;
+  var url = window.location.origin + '/c/' + code;
+  navigator.clipboard.writeText(url).then(function() {
+    showToast('Link copied!');
+  }).catch(function() {
+    prompt('Copy this link:', url);
+  });
+}
+
+var toastTimer = null;
+function showToast(msg) {
+  var toast = document.getElementById('successToast');
+  document.getElementById('successToastMsg').textContent = msg;
+  toast.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { toast.classList.remove('visible'); }, 2000);
+}
+
+// Name sheet: dismiss on backdrop click or Escape
+document.getElementById('nameSheet').addEventListener('click', function(e) {
+  if (e.target === this) hideNameEntry();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('nameSheet').classList.contains('visible')) {
+    hideNameEntry();
+  }
+});
+document.getElementById('nameInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); submitName(); }
+});
+
 updateAdvancedHint();
+
+// --- Deep link: ?challenge=CODE → auto-join challenge ---
+(function() {
+  var code = new URLSearchParams(window.location.search).get('challenge');
+  if (code) {
+    code = code.toUpperCase().replace(/[^0-9A-Z]/g, '');
+    if (code) {
+      history.replaceState(null, '', '/');
+      joinChallenge(code);
+    }
+  }
+})();
 </script>
 <script src="home.js"></script>
 

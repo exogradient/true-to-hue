@@ -6,7 +6,7 @@ Color memory game. Unleash your color superpower.
 
 ## Stack & Architecture
 - Runtime: Python 3.13+, uv, FastAPI, uvicorn
-- Storage: SQLite — local: `data/games.db`, Vercel: `/tmp/games.db` (ephemeral)
+- Storage: SQLite — local: `data/games.db`, Vercel: `/tmp/games.db` (ephemeral). Challenge DB: local SQLite `data/challenges.db`, production Turso via HTTP (env: `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`)
 - Layout: Single-file backend (`api/app.py`), single-file frontend (`public/index.html`), analytics module (`public/analytics.js`)
 - Deploy: Vercel — serverless Python, `public/` CDN-served, rewrites in `vercel.json`
 - Game flow: Client-driven — colors generated and scored client-side, server is append-only persistence

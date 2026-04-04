@@ -1,7 +1,7 @@
 ---
 title: Milestones
 description: Shipped capability inflection points — what became possible, what it proved, what it unblocked.
-summary: "All five modes playable, OG social preview shipped. Beta nearing completion: design pass and share remaining."
+summary: "All five modes playable. Beta remaining: text-only share."
 ---
 
 ## Beta release `in-progress`
@@ -10,22 +10,16 @@ All five modes playable, polished UX. The game is worth sharing broadly.
 
 **Will prove:** Full skill coverage — each of the five perceptual skills has a dedicated training mode.
 **Will unblock:** Public launch, broader feedback, progression/tracking features.
-**Will ship:** Scoring curve finalized, design pass, share results.
+**Will ship:** Scoring curve finalized, share results.
 
 **Shipped so far:**
-- PWA icon suite (light installed-app icon, transparent tab favicon, apple-touch, maskable, manifest.json)
-- Mobile viewport hardening (viewport-fit=cover, safe-area insets, svh→dvh, top-aligned flex — iPhone Safari validated)
-- Focus-visible accessibility styles
-- Scoring calibration pipeline (auto-grader, regression fixtures, parity checks, population profiling)
-- Homepage redesign (2-column card grid with spectral-ring hero)
-- Touch target expansion (hue bar 44px, SB thumb 26px)
-- Call It mode (XKCD color survey 949 names, CIEDE2000 nearest-match, distance-based scoring, lazy LAB cache, 8 choices per round)
-- Split It mode (neutral sliders — no color preview/gradient hints, hue color dots, intensity dots, live value readouts, HSB reveal bars shown by default, CIEDE2000 scoring)
-- All five modes now playable — no more "Coming soon" cards
-- OG social preview (1200×630 image, Open Graph + Twitter Card meta tags, tagline "Unleash your color superpower")
+- All five modes playable (Play, Match It, Picture It, Call It, Split It)
+- Scoring calibration pipeline (auto-grader, regression fixtures, population profiling)
+- Homepage redesign, OG social preview, PWA icon suite
+- Mobile hardening (viewport-fit=cover, safe-area insets, touch targets, iPhone Safari validated)
+- Adaptive memorize overlay (pill contrast adapts to target brightness)
 
 **Remaining:**
-- Design pass — results reveal order, picker toggle, adaptive overlay, directional transitions, confirm button layout, low-score empathy, history empty state
 - Text-only share (navigator.share / clipboard + toast)
 
 ## 2026-03-30 — Alpha release `completed`

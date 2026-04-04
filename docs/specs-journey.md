@@ -14,10 +14,9 @@ Menu → Countdown → [ Memorize → Pick → Reveal ] ×5 → Results
 
 ## Menu
 
-- **Play** / **Match It** / **Picture It** / **Call It** buttons (active modes)
-- **Split It** — planned mode, not yet active
-- **History** button → History screen
-- **Settings** — picker type dropdown: Field (default) or Sliders
+- Paint-chip card stack: **Play** hero card (parchment), **Match It** / **Picture It** / **Call It** / **Split It** as overlapping colored cards below (mobile) or fanned right (desktop)
+- **Toolbar** (bottom of stack, low opacity until hover): picker toggle, history button
+- **Join challenge** input (pill-shaped form below toolbar, low opacity until hover/focus): text input ("Enter code") + forward-arrow submit button → joins challenge via code
 
 ## Countdown (Play only)
 
@@ -62,7 +61,8 @@ Menu → Countdown → [ Memorize → Pick → Reveal ] ×5 → Results
 - Hero panel: total score with inline "/50" on the same baseline, score tier label (e.g. "SOLID EYE"), mode + picker eyebrow (e.g. "PLAY · FIELD PICKER") — contained in a surface panel with border and elevation. Tappable to toggle advanced details.
 - 5 result cards (fixed 3-column grid via `repeat(3, 1fr)`, top-aligned): target vs guess swatch (diagonal split), per-color score (bare number). Per-card verdict text hidden — progressive disclosure only.
 - **Call It result cards:** no per-card score. Correct name shown as link to xkcd color survey entry. Wrong picks show "you said *name*" below. Names link to `xkcd.com/color/rgb/#:~:text=<name>`.
-- **Menu** / **Play Again** buttons
+- **Menu** / **Play Again** / **Share** buttons
+- **Share** → name entry modal → creates challenge (or submits entry if already in a challenge) → Challenge Leaderboard screen
 
 **Default (clean):** swatches + scores + hero metadata. Verdict text reserved for advanced view.
 
@@ -77,6 +77,29 @@ localStorage-backed. No server dependency. Top-aligned layout, not vertically ce
 - Each row: date, total score /50, mini color strip (5 target swatches)
 - Tap row → full Results view for that game (reuses Results layout)
 - ~500 bytes per game, capped at 20 per mode
+
+## Challenge Sharing
+
+Full design in `design-sharing`.
+
+### Name Entry Modal
+
+- Bottom sheet overlay, triggered by Share button (Results) or Join submit
+- Text input (max 20 chars) + action button ("Share" for create, "Submit" for join)
+- No auth — display name only, scoped per challenge
+
+### Challenge Leaderboard
+
+- Challenge code displayed large (copyable via tap)
+- Mode label + target color swatches
+- Leaderboard: rank, name, tier, score — sorted by total_score DESC
+- "You" badge on player's own entry
+- Copy button → `navigator.clipboard.writeText(code)` → "Copied!" toast (fallback: `prompt()`)
+
+### Challenge Join Flow
+
+- Enter code on Menu join input → GET `/api/challenge/{code}` → game starts with same mode + target colors
+- After finishing → Share button → name entry → POST submits entry → leaderboard
 
 ---
 

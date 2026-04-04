@@ -5,35 +5,12 @@ stability: volatile
 responsibility: Prioritized direction — what we might build, ordered by readiness
 ---
 
-## Beta
+## Beta — shipped
 
-All five modes playable with full visual identity.
+All five modes playable with full visual identity. Adaptive memorize overlay, challenge sharing (`design-sharing`).
 
-**Frontend:**
-- Menu cold start — tagline below brand mark on Play card (e.g. "How well do you really see color?") + one-line descriptor per mode card (~40 chars). Replace descriptors with personal best after 3+ games
-- ~~Disabled mode card~~ — all modes now playable, no more "Coming soon" cards
-- Achromatic gameplay background — tinted body gradient (gold/blue radials at 10-12% opacity) persists during gameplay, affecting color perception. Scope to home screen only; gameplay uses pure `var(--bg)`
-- Touch targets — hue bar hit area 34px, below 44px minimum (Apple HIG). Expand via padding. SB field thumb (22px visual) similarly needs 44px hit area
-- Mobile scroll overlap — confirm button (position:fixed) overlaps picker on short viewports (iPhone SE). Add `padding-bottom: calc(80px + env(safe-area-inset-bottom))`
-- Text-only share on results screen — `navigator.share()` (mobile), clipboard + toast (desktop). Format: mode, per-color scores, total + tier, URL. No image gen for v1
-- Social og image
-- Scoring drift monitoring: continue tuning against `auto-grader` verdicts, random audit slice for blind-spot discovery, revisit same-hue large-SB and moderate-hue edge cases if fresh exports show renewed disagreement
-- Future data accrual: thumbs-down feedback in power-user mode on reveal/result screens
-- Design pass (screen-by-screen polish before new modes ship):
-  - Font weight trim: drop 600 → 500, keep 400/500/700 (~20KB)
-  - Results reveal order: cards first (staggered), then total with scale pulse (0.95→1.0, 200ms) — total as conclusion, not headline
-  - Contextual picker toggle: "Field | Sliders" segmented control in pick screen above picker. Menu toggle stays as shortcut
-  - Adaptive memorize overlay: pill darkens on bright targets (B>70, S<40), lightens on dark targets
-  - Directional transitions: forward translateY(8px)→0, backward translateY(-4px)→0, quit opacity-only 150ms
-  - Tier color desaturation ~15%: gold → #b8a078, teal → #7a9a9e (hierarchy via lightness, not chroma)
-  - Confirm button in layout flow relative to picker, not viewport-fixed. Mobile: full-width pill. Desktop: picker panel corner
-  - PWA install prompt after 3rd game, one-time dismissible banner. `beforeinstallprompt` (Android), instructional (iOS)
-  - Low-score empathy: warm feedback text for sub-15 scores (Early reps) — highest-risk churn moment
-  - History empty state: "No games yet. Play one?" with ghost Play button
-
-**Modes** (after frontend pass):
-- ~~Call It~~ — shipped. XKCD color survey (949 names), CIEDE2000 nearest-match, lazy LAB cache, partial sort for distractor selection.
-- ~~Split It~~ — shipped. Neutral sliders (no color preview, no gradient hints), hue color dots + intensity dots for orientation, value readouts track thumb position, reveal shows HSB comparison bars by default. CIEDE2000 scoring. Future: difficulty levels (coarse→narrow buckets) for all modes or adaptive scaling.
+**Ongoing:**
+- Scoring drift monitoring: continue tuning against `auto-grader` verdicts, revisit edge cases if fresh exports show disagreement
 
 ## Planned
 
@@ -45,12 +22,13 @@ Lens on Play data. Decomposes where errors come from and routes to the right mod
 
 ### Sharing + Leaderboard
 
-Core social loop that made dialed.gg sticky:
+Core social loop. v1 shipped (`design-sharing`): challenge codes, per-challenge leaderboard (max 20), name entry.
 
-- **Share results** — shareable card/link after each game (score, mode, color swatches)
-- **Challenge links** — share a specific color set so friends play the same round
-- **Leaderboard** — global or friends-only, filterable by mode
+**Remaining:**
+- **Share results** — shareable text card after each game (score, mode, color swatches). No image gen
 - **Daily challenge** — same colors for everyone, compare scores
+- **Server-side scoring** — CIEDE2000 re-validation to prevent score spoofing
+- **Global leaderboard** — filterable by mode (needs persistent DB, which Turso enables)
 
 ### Progression
 
@@ -74,13 +52,18 @@ No user-facing tone toggle — the mode selection is the toggle.
 
 No design-log decision yet — voice direction above is the working spec.
 
+### Snap It — image color explorer `learning`
+
+Pure learning mode, no scoring. Load an image, drag a selector across pixels. At each position show HSB values and XKCD color name. Builds color intuition by connecting real-world visuals to the HSB/naming vocabulary the other modes test.
+
+No game loop — this is a reference tool. Could use camera input (mobile) or photo upload. Reuses the XKCD name-lookup already in Call It.
+
 ### Educational (nearly free)
-- Basic color naming (hue→name) → builds vocabulary
-- Real-world color examples ("this is the same hue as a school bus")
+- Real-world color examples ("this is the same hue as a school bus") — contextual to gameplay
 
 ### Onboarding `v2`
 
-3-screen guided first-play: (1) "You'll see a color for 5 seconds," (2) "Recreate it from memory," (3) "Let's try one." Interactive, skippable. Not needed for v1 if mode descriptors solve cold start.
+3-screen guided first-play: (1) "You'll see a color for 5 seconds," (2) "Recreate it from memory," (3) "Let's try one." Interactive, skippable. The card-stack home screen may already solve cold start — revisit if analytics show high first-session drop-off.
 
 ### Desktop differentiation
 
@@ -95,4 +78,4 @@ No design-log decision yet — voice direction above is the working spec.
 - Multiplayer real-time
 - Cultural/historical color context
 - Synesthesia associations, cross-domain connections
-- Progress charts and trend analysis (need data first)
+- Progress charts and trend analysis (covered by Progression above)
